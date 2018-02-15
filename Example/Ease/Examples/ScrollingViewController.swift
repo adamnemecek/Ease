@@ -3,11 +3,11 @@ import UIKit
 import Ease
 
 class ScrollingViewController: UIViewController, ExampleViewController {
-    
+
     var disposal = EaseDisposal()
     private lazy var ease = Ease(initialValue: view.center)
     private lazy var circles = createCircles()
-    
+
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -16,19 +16,19 @@ class ScrollingViewController: UIViewController, ExampleViewController {
         view.alwaysBounceVertical = true
         view.isDirectionalLockEnabled = true
         view.delegate = self
-        
+
         if #available(iOS 11.0, *) {
             view.contentInsetAdjustmentBehavior = .never
         }
-        
+
         return view
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .tintColor3
-        
+
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -36,7 +36,7 @@ class ScrollingViewController: UIViewController, ExampleViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
             ])
-        
+
         for (i, circle) in circles.enumerated() {
             circle.center = view.center
             view.addSubview(circle)
@@ -51,7 +51,7 @@ class ScrollingViewController: UIViewController, ExampleViewController {
                 circle.center.y = strongSelf.view.bounds.height - ((strongSelf.view.bounds.width / 4) + (offset.y / 4))
                 }.add(to: &disposal)
         }
-        
+
         view.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: scrollView.frame.width * 3, height: scrollView.frame.height * 3)
         scrollView.contentOffset = CGPoint(x: scrollView.frame.width, y: scrollView.frame.height)
@@ -59,7 +59,7 @@ class ScrollingViewController: UIViewController, ExampleViewController {
 }
 
 extension ScrollingViewController: UIScrollViewDelegate {
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         ease.targetValue = scrollView.contentOffset
     }
